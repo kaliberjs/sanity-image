@@ -3,9 +3,9 @@ import imageUrlBuilder from '@sanity/image-url'
 
 const SIZES = [320, 480, 720, 1024, 1440, 1920, 2760, 3600]
 
-export function Image({ image, layoutClassName = undefined, imgProps = {} }) {
+export function Image({ sanityConfig, image, layoutClassName = undefined, imgProps = {} }) {
   const { ref: sizeRef, size: { width = 0 } } = useElementSize()
-  const { src, srcSet } = useSrcSet({ image })
+  const { src, srcSet } = useSrcSet({ config: sanityConfig, image })
 
   return (
     <img
@@ -21,9 +21,9 @@ export function Image({ image, layoutClassName = undefined, imgProps = {} }) {
   )
 }
 
-export function ImageFixedAspectRatio({ image, aspectRatio, layoutClassName = undefined, imgProps = {} }) {
+export function ImageFixedAspectRatio({ sanityConfig, image, aspectRatio, layoutClassName = undefined, imgProps = {} }) {
   const { ref: sizeRef, size: { width = 0 } } = useElementSize()
-  const { src, srcSet } = useSrcSet({ image, aspectRatio })
+  const { src, srcSet } = useSrcSet({ config: sanityConfig, image, aspectRatio })
 
   return (
     <img
@@ -39,9 +39,9 @@ export function ImageFixedAspectRatio({ image, aspectRatio, layoutClassName = un
   )
 }
 
-export function ImageCover({ image, layoutClassName = undefined, imgProps = {} }) {
+export function ImageCover({ sanityConfig, image, layoutClassName = undefined, imgProps = {} }) {
   const { ref: sizeRef, size: { width = 0, height = 0 } } = useElementSize()
-  const { src, srcSet } = useSrcSet({ image, aspectRatio })
+  const { src, srcSet } = useSrcSet({ config: sanityConfig, image })
 
   const dimensions = image.asset.metadata.dimensions
   const actualWidth = (width && height) 
@@ -49,7 +49,7 @@ export function ImageCover({ image, layoutClassName = undefined, imgProps = {} }
     : 0
 
   return (
-    <animated.img
+    <img
       {...imgProps}
       ref={sizeRef}
       className={layoutClassName}
@@ -66,22 +66,29 @@ export function ImageCover({ image, layoutClassName = undefined, imgProps = {} }
   )
 }
 
+
 function useSrcSet({ config, image, aspectRatio = undefined }) {
   const builder = imageUrlBuilder(config)
 
   return React.useMemo(
     () => {
-      const thumb = 
-        image.asset.metadata.lqip ??
-        builder.image(image).width(20).quality(0).blur(20).auto('format').url()
+      const thumb = {
+        src: (
+          image.asset.metadata.lqip ??
+          builder.image(image).width(20).quality(0).blur(20).auto('format').url()
+        ),
+        width: 1
+      }
 
-      const srcSet = aspectRatio
-        ? SIZES.map(x => `${builder.image(image).width(x).height(Math.round(x / aspectRatio)).quality(75).auto('format').url()} ${x}w`).join(', ')
-        : SIZES.map(x => `${builder.image(image).width(x).quality(75).auto('format').url()} ${x}w`).join(', ')
+      const sources = aspectRatio
+        ? SIZES.map(x => ({ src: builder.image(image).width(x).height(Math.round(x / aspectRatio)).quality(75).auto('format').url(), width: x }))
+        : SIZES.map(x => ({ src: builder.image(image).width(x).quality(75).auto('format').url(), width: x }))
 
-      const [src] = srcSet.slice(-1)
+      const src = sources.slice(-1)[0].src
+      const srcSet = [thumb, ...sources].map(x => `${x.src} ${x.width}w`).join(',')
 
-      return { thumb, src, srcSet }
+
+      return { src, srcSet }
     },
     [image, aspectRatio, builder]
   )
