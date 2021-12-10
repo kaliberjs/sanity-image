@@ -11,8 +11,7 @@ export function Image({
 }) {
   return (
     <ImageBase  
-      {...imgProps}
-      {...{ sanityConfig, image, layoutClassName }}
+      {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidth()}
       deriveSizes={deriveSizes()}
     />
@@ -29,7 +28,7 @@ export function ImageCropped({
   return (
     <ImageBase  
       {...imgProps}
-      {...{ sanityConfig, image, layoutClassName }}
+      {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCropped(aspectRatio)}
     />
@@ -45,8 +44,7 @@ export function ImageCover({
 }) {
   return (
     <ImageBase  
-      {...imgProps}
-      {...{ sanityConfig, image, layoutClassName }}
+      {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCover(aspectRatio)}
       style={{
