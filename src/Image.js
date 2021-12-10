@@ -102,7 +102,7 @@ function useSrcSet({ config, image, adjustImage }) {
         width: 1
       }
 
-      const baseImage = builder.image(image).quality(80).auto('format')
+      const baseImage = builder.image(image).quality(80).auto('format').fit('max')
       const sources = SIZES.map(width => ({ src: adjustImageRef.current(baseImage, width).url(), width }))
 
       const src = sources.slice(-1)[0].src
