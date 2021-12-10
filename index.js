@@ -1,1 +1,1 @@
-export { hello } from './src/hello'
+export { Image, ImageCropped, ImageCover } from './src/Image'
