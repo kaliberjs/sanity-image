@@ -72,7 +72,7 @@ function ImageBase({
 }) {
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
-  const { width, height, sizes } = useDerivedSizes({
+  const { width, height, size } = useDerivedSizes({
     deriveSizes, 
     displaySize,
     naturalSize: image.asset.metadata.dimensions  
@@ -83,7 +83,7 @@ function ImageBase({
       {...imgProps}
       ref={sizeRef}
       className={layoutClassName}
-      sizes={sizes + 'px'}
+      sizes={size + 'px'}
       {...{ src, srcSet, width, height, style }}
     />
   )
@@ -139,7 +139,7 @@ function deriveSizes() {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
     height: naturalSize.height,
-    sizes: displaySize.width + 'px'
+    size: Math.max(1, displaySize.width)
   })
 }
 
@@ -147,7 +147,7 @@ function deriveSizesCropped(aspectRatio) {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
     height: naturalSize.height / aspectRatio,
-    sizes: displaySize.width + 'px'
+    size: Math.max(1, displaySize.width)
   })
 }
 
@@ -155,13 +155,14 @@ function deriveSizesCropped(aspectRatio) {
 // width in case the image is scaled up by object-fit
 function deriveSizesCover(aspectRatio) {
   return ({ naturalSize, displaySize }) => {
-    const sizes = (naturalSize.height && displaySize.height && displaySize.width) 
-    ? Math.max(displaySize.height / naturalSize.height * naturalSize.width, displaySize.width)
-    : 0
+    const size = (naturalSize.height && displaySize.height && displaySize.width) 
+      ? Math.max(displaySize.height / naturalSize.height * naturalSize.width, displaySize.width)
+      : 0
+
     return {
       width: naturalSize.width,
       height: naturalSize.height / aspectRatio,
-      sizes: sizes + 'px'
+      size: Math.max(1, size)
     }
   }
 }
