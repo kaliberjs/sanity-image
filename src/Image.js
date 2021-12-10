@@ -144,7 +144,7 @@ function deriveSizes() {
 function deriveSizesCropped(aspectRatio) {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
-    height: naturalSize.height / aspectRatio,
+    height: naturalSize.width / aspectRatio,
     size: Math.max(1, displaySize.width)
   })
 }
@@ -159,7 +159,7 @@ function deriveSizesCover(aspectRatio) {
 
     return {
       width: naturalSize.width,
-      height: naturalSize.height / aspectRatio,
+      height: naturalSize.width / aspectRatio,
       size: Math.max(1, size)
     }
   }
