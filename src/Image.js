@@ -153,8 +153,8 @@ function deriveSizesCropped(aspectRatio) {
 // width in case the image is scaled up by object-fit
 function deriveSizesCover(aspectRatio) {
   return ({ naturalSize, displaySize }) => {
-    const size = (naturalSize.height && displaySize.height && displaySize.width) 
-      ? Math.max(displaySize.height / naturalSize.height * naturalSize.width, displaySize.width)
+    const size = (naturalSize.width && displaySize.width) 
+      ? Math.max(displaySize.width / aspectRatio * naturalSize.width, displaySize.width)
       : 0
 
     return {
