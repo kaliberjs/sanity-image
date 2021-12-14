@@ -94,6 +94,11 @@ function useSrcSet({ config, image, adjustImage }) {
 
   return React.useMemo(
     () => {
+      const [maxSize] = SIZES.slice(-1)
+      const sizes = SIZES.slice(0, -1)
+        .filter(w => w < image.asset.metadata.dimensions.width)
+        .concat(Math.min(image.asset.metadata.dimensions.width, maxSize))
+
       const thumb = {
         src: (
           image.asset.metadata.lqip ??
@@ -102,8 +107,8 @@ function useSrcSet({ config, image, adjustImage }) {
         width: 1
       }
 
-      const baseImage = builder.image(image).quality(80).auto('format').fit('max')
-      const sources = SIZES.map(width => ({ src: adjustImageRef.current(baseImage, width).url(), width }))
+      const baseImage = builder.image(image).quality(80).auto('format')
+      const sources = sizes.map(width => ({ src: adjustImageRef.current(baseImage, width).url(), width }))
 
       const src = sources.slice(-1)[0].src
       const srcSet = [thumb, ...sources].map(x => `${x.src} ${x.width}w`).join(',')
