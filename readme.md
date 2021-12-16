@@ -21,13 +21,33 @@ compileWithBabel: [
 ```
 
 ## Usage
+### Data requirements
+The components are meant to be used with the Sanity `image` type, but you do have to dereference the asset field. The asset fields contains information that is used to determine the correct image sizes to fetch and to add the correct width and height attributes to the `img` tag on the server, thus preventing [CLS](https://web.dev/cls/).
+
+#### Dereferencing the asset field
+You dereference the asset field, by providing a projection for your image field and using the access operator on the asset field (`->`).
+
+_Before_
+```js
+groq`*[_type == 'article']`
+```
+
+_After_
+```js
+groq`*[_type == 'article']{
+  ...,
+  image{..., asset->}
+}`
+```
+
+### Components
 This library exports three components, `Image`, `ImageCropped` and `ImageCover`, each with slightly different usecases.
 
 - Use `Image` when you want to use an image as is, no cropping, no `object-fit: cover`.
 - Use `ImageCropped` when you want to use a cropped image. The crop is determined by the `aspectRatio` you provide (this respects the hotspot, when configured in Sanity).
 - Use `ImageCover` when you need an image that covers a size defined in CSS, but this size doesn't have a fixed aspect ratio. This component compensates for upscaling due to using `object-fit: cover`.
 
-### `Image`
+#### `Image`
 ```jsx
 import { Image } from '@kaliber/sanity-image'
 
@@ -44,7 +64,7 @@ function Component({ image }) {
 }
 ```
 
-### `ImageCropped`
+#### `ImageCropped`
 Don't use this component if your `aspectRatio` is dynamic, since it will regenerate the images when an unknown `aspectRatio` is used. In this case, use `ImageCover` instead.
 ```jsx
 import { ImageCropped } from '@kaliber/sanity-image'
@@ -63,7 +83,7 @@ function Component({ image }) {
 }
 ```
 
-### `ImageCover`
+#### `ImageCover`
 Try to use an `aspectRatio` that's close to the dynamic aspect ratio of your image. This way, you will download the smallest image needed.
 
 ```jsx
