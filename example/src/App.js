@@ -12,19 +12,19 @@ export default function App({ config }) {
       </AppSection>  
 
       <AppSection title='Cropped image (16/9)'>
-        <ImageCropped sanityConfig={config.sanity} aspectRatio={16/9} {...{ image }} />
+        <ImageCropped sanityConfig={config.sanity} aspectRatio={16 / 9} {...{ image }} />
       </AppSection>  
 
       <AppSection title='Cropped image (1/1)'>
-        <ImageCropped sanityConfig={config.sanity} aspectRatio={1/1} {...{ image }} layoutClassName={styles.imageCropped1To1} />
+        <ImageCropped sanityConfig={config.sanity} aspectRatio={1 / 1} {...{ image }} layoutClassName={styles.imageCropped1To1} />
       </AppSection>  
 
       <AppSection title='Cropped image (1/2)'>
-        <ImageCropped sanityConfig={config.sanity} aspectRatio={1/2} {...{ image }} layoutClassName={styles.imageCropped1To2} />
+        <ImageCropped sanityConfig={config.sanity} aspectRatio={1 / 2} {...{ image }} layoutClassName={styles.imageCropped1To2} />
       </AppSection>  
 
       <AppSection title='Image with object-fit'>
-        <ImageCover sanityConfig={config.sanity} aspectRatio={16/9} {...{ image }} layoutClassName={styles.imageCover} />
+        <ImageCover sanityConfig={config.sanity} aspectRatio={16 / 9} {...{ image }} layoutClassName={styles.imageCover} />
       </AppSection>  
     </main>
   )
