@@ -77,7 +77,7 @@ function ImageBase({
   const { width, height, size } = useDerivedSizes({
     deriveSizes, 
     displaySize,
-    naturalSize: image.asset.metadata.dimensions  
+    naturalSize: image.asset?.metadata.dimensions ?? { width: 0, height: 0 }
   })
 
   return (
@@ -98,6 +98,11 @@ function useSrcSet({ config, image, adjustImage }) {
 
   return React.useMemo(
     () => {
+      if (!image.asset) {
+        if (process.env.NODE_ENV !== 'production') console.warn('Image doesn\'t have associated asset object. This will render an <img /> tag with an empty src attribute.')
+        return { src: '', srcSet: '' }
+      }
+
       const [maxSize] = SIZES.slice(-1)
       const sizes = SIZES.slice(0, -1)
         .filter(w => w < image.asset.metadata.dimensions.width)
