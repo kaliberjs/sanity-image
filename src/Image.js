@@ -104,10 +104,7 @@ function useSrcSet({ config, image, adjustImage }) {
         .concat(Math.min(image.asset.metadata.dimensions.width, maxSize))
 
       const thumb = {
-        src: (
-          image.asset.metadata.lqip ??
-          builder.image(image).width(20).quality(0).blur(20).auto('format').url()
-        ),
+        src: adjustImageRef.current(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
         width: 1
       }
 
