@@ -68,8 +68,8 @@ function ImageBase({
   imgProps = {}, 
   layoutClassName = undefined 
 }) {
-  if (process.env.NODE_ENV !== 'production' && !image.asset.metadata) {
-    console.error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
+  if (image?.asset && !image.asset.metadata) {
+    throw new Error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
   }
 
   const { ref: sizeRef, size: displaySize } = useElementSize()
