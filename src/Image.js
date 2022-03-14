@@ -77,7 +77,7 @@ function ImageBase({
   const { width, height, size } = useDerivedSizes({
     deriveSizes,
     displaySize,
-    naturalSize: image.asset.metadata.dimensions ?? { width: 0, height: 0 }
+    naturalSize: image.asset?.metadata.dimensions ?? { width: 0, height: 0 }
   })
 
   return (
