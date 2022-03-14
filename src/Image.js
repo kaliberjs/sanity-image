@@ -75,9 +75,9 @@ function ImageBase({
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
   const { width, height, size } = useDerivedSizes({
-    deriveSizes, 
+    deriveSizes,
     displaySize,
-    naturalSize: image.asset?.metadata.dimensions ?? { width: 0, height: 0 }
+    naturalSize: image.asset.metadata.dimensions ?? { width: 0, height: 0 }
   })
 
   return (
