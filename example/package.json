@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@kaliber/build": "^0.0.116",
+    "@kaliber/build": "^0.0.123",
     "@kaliber/use-element-size": "^3.0.0",
     "@sanity/image-url": "^1.0.1"
   },
