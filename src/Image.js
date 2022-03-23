@@ -6,12 +6,13 @@ const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
 export function Image({
   sanityConfig,
   image,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidth()}
       deriveSizes={deriveSizes()}
     />
@@ -22,13 +23,14 @@ export function ImageCropped({
   sanityConfig,
   image,
   aspectRatio,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
       {...imgProps}
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCropped(aspectRatio)}
     />
@@ -39,12 +41,13 @@ export function ImageCover({
   sanityConfig,
   image,
   aspectRatio,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCover(aspectRatio)}
       style={{
@@ -64,6 +67,7 @@ function ImageBase({
   image,
   adjustImage,
   deriveSizes,
+  sizes = undefined,
   style = {}, 
   imgProps = {}, 
   layoutClassName = undefined 
@@ -85,7 +89,7 @@ function ImageBase({
       {...imgProps}
       ref={sizeRef}
       className={layoutClassName}
-      sizes={size + 'px'}
+      sizes={sizes || `${size}px`}
       {...{ src, srcSet, width, height, style }}
     />
   )
