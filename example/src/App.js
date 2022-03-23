@@ -10,6 +10,10 @@ export default function App({ config }) {
       <AppSection title='Regular image'>
         <Image sanityConfig={config.sanity} {...{ image }} />
       </AppSection>  
+      
+      <AppSection title='Image with sizes attribute'>
+        <ImageCropped sanityConfig={config.sanity} aspectRatio={2 / 1} sizes='(min-width: 760px) 720px, calc(100vw - 40px)' {...{ image }} />
+      </AppSection>  
 
       <AppSection title='Cropped image (16/9)'>
         <ImageCropped sanityConfig={config.sanity} aspectRatio={16 / 9} {...{ image }} />

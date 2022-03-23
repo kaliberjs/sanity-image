@@ -4,6 +4,8 @@ An image component for Sanity, which manages resizing, cropping, srcSet and size
 ## Motivation
 Sanity provides a lot of options when it comes to image optimization and this component tries to be the one size fits all solution, making sure you don't have to think about these. It also manages `srcSet` and `sizes` for you by looking at the actual displayed size of the image. This fits much better within a component driven model, where you never know in advance where your component is going to be used (and which `sizes` value you should therefore use).
 
+Even though the components work without a `sizes` prop, they *do* accept one. This allows the image to be displayed immediately, without your javascript bundle being parsed. Useful for images that are displayed above the fold, to reduce your LCP time. Think: hero images. 
+
 ## Installation
 
 Add the following libraries to your `compileWithBabel` array:
@@ -46,6 +48,8 @@ This library exports three components, `Image`, `ImageCropped` and `ImageCover`,
 - Use `Image` when you want to use an image as is, no cropping, no `object-fit: cover`.
 - Use `ImageCropped` when you want to use a cropped image. The crop is determined by the `aspectRatio` you provide (this respects the hotspot, when configured in Sanity).
 - Use `ImageCover` when you need an image that covers a size defined in CSS, but this size doesn't have a fixed aspect ratio. This component compensates for upscaling due to using `object-fit: cover`.
+
+All images accept a `sizes` prop. If this is given, any calculated size is ignored.
 
 #### `Image`
 ```jsx
