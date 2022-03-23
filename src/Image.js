@@ -6,15 +6,14 @@ const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
 export function Image({
   sanityConfig,
   image,
-  sizes = undefined,
-  layoutClassName = undefined,
-  imgProps = {}
+  layoutClassName = undefined, 
+  imgProps = {} 
 }) {
   return (
-    <ImageBase
+    <ImageBase  
       {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidth()}
-      deriveSizes={deriveSizes({ sizes })}
+      deriveSizes={deriveSizes()}
     />
   )
 }
@@ -23,16 +22,15 @@ export function ImageCropped({
   sanityConfig,
   image,
   aspectRatio,
-  sizes = undefined,
-  layoutClassName = undefined,
-  imgProps = {}
+  layoutClassName = undefined, 
+  imgProps = {} 
 }) {
   return (
-    <ImageBase
+    <ImageBase  
       {...imgProps}
       {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
-      deriveSizes={deriveSizesCropped({ aspectRatio, sizes })}
+      deriveSizes={deriveSizesCropped(aspectRatio)}
     />
   )
 }
@@ -41,21 +39,20 @@ export function ImageCover({
   sanityConfig,
   image,
   aspectRatio,
-  sizes = undefined,
-  layoutClassName = undefined,
-  imgProps = {}
+  layoutClassName = undefined, 
+  imgProps = {} 
 }) {
   return (
-    <ImageBase
+    <ImageBase  
       {...{ sanityConfig, image, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
-      deriveSizes={deriveSizesCover({ aspectRatio, sizes })}
+      deriveSizes={deriveSizesCover(aspectRatio)}
       style={{
         objectFit: 'cover',
-        ...image.hotspot && {
-          // Because our cropped image size may not match the actual display size,
+        ...image.hotspot && { 
+          // Because our cropped image size may not match the actual display size, 
           // it's useful to set the object-position the hotspot x and y values
-          objectPosition: `${image.hotspot.x * 100}% ${image.hotspot.y * 100}%`
+          objectPosition: `${image.hotspot.x * 100}% ${image.hotspot.y * 100}%` 
         }
       }}
     />
@@ -67,9 +64,9 @@ function ImageBase({
   image,
   adjustImage,
   deriveSizes,
-  style = {},
-  imgProps = {},
-  layoutClassName = undefined
+  style = {}, 
+  imgProps = {}, 
+  layoutClassName = undefined 
 }) {
   if (process.env.NODE_ENV !== 'production' && !image.asset.metadata) {
     console.error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
@@ -77,18 +74,19 @@ function ImageBase({
 
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
-  const { width, height, sizes } = useDerivedSizes({
-    deriveSizes,
+  const { width, height, size } = useDerivedSizes({
+    deriveSizes, 
     displaySize,
-    naturalSize: image.asset.metadata.dimensions
+    naturalSize: image.asset.metadata.dimensions  
   })
 
   return (
-    <img
+    <img 
       {...imgProps}
       ref={sizeRef}
       className={layoutClassName}
-      {...{ src, srcSet, sizes, width, height, style }}
+      sizes={size + 'px'}
+      {...{ src, srcSet, width, height, style }}
     />
   )
 }
@@ -131,7 +129,7 @@ function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
   deriveSizesRef.current = deriveSizes
 
   return React.useMemo(
-    () => deriveSizesRef.current({ naturalSize, displaySize }),
+    () => deriveSizesRef.current({ naturalSize, displaySize }), 
     [naturalSize.width, naturalSize.height, displaySize.width, displaySize.height]
   )
 }
@@ -141,49 +139,37 @@ function adjustImageWidth() {
 }
 
 function adjustImageWidthAndCrop(aspectRatio) {
-  return (image, width) => image.width(width).height(Math.round(width / aspectRatio))
+  return (image, width) => image.width(width).height(Math.round(width / aspectRatio)) 
 }
 
-function deriveSizes({ sizes }) {
+function deriveSizes() {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
     height: naturalSize.height,
-    sizes: (
-      sizes ? sizes :
-      displaySize.width ? displaySize.width + 'px' :
-      '1px'
-    )
+    size: Math.max(1, displaySize.width)
   })
 }
 
-function deriveSizesCropped({ aspectRatio, sizes }) {
+function deriveSizesCropped(aspectRatio) {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
     height: naturalSize.width / aspectRatio,
-    sizes: (
-      sizes ? sizes :
-      displaySize.width ? displaySize.width + 'px' :
-      '1px'
-    )
+    size: Math.max(1, displaySize.width)
   })
 }
 
 // deriveSizesCover can return a sizes value larger than the actual display 
 // width in case the image is scaled up by object-fit
-function deriveSizesCover({ aspectRatio, sizes }) {
+function deriveSizesCover(aspectRatio) {
   return ({ naturalSize, displaySize }) => {
-    const size = (displaySize.width && displaySize.height)
+    const size = (displaySize.width && displaySize.height) 
       ? Math.max(displaySize.height * aspectRatio, displaySize.width)
       : 0
 
     return {
       width: naturalSize.width,
       height: naturalSize.width / aspectRatio,
-      sizes: (
-        sizes ? sizes :
-        size ? size + 'px' :
-        '1px'
-      )
+      size: Math.max(1, size)
     }
   }
 }
