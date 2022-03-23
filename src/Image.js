@@ -68,16 +68,16 @@ function ImageBase({
   imgProps = {}, 
   layoutClassName = undefined 
 }) {
-  if (process.env.NODE_ENV !== 'production' && !image.asset.metadata) {
-    console.error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
+  if (image?.asset && !image.asset.metadata) {
+    throw new Error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
   }
 
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
   const { width, height, size } = useDerivedSizes({
-    deriveSizes, 
+    deriveSizes,
     displaySize,
-    naturalSize: image.asset.metadata.dimensions  
+    naturalSize: image.asset?.metadata.dimensions ?? { width: 0, height: 0 }
   })
 
   return (
@@ -98,16 +98,18 @@ function useSrcSet({ config, image, adjustImage }) {
 
   return React.useMemo(
     () => {
+      if (!image.asset) {
+        if (process.env.NODE_ENV !== 'production') console.warn('Image doesn\'t have associated asset object. This will render an <img /> tag with an empty src attribute.')
+        return { src: '', srcSet: '' }
+      }
+
       const [maxSize] = SIZES.slice(-1)
       const sizes = SIZES.slice(0, -1)
         .filter(w => w < image.asset.metadata.dimensions.width)
         .concat(Math.min(image.asset.metadata.dimensions.width, maxSize))
 
       const thumb = {
-        src: (
-          image.asset.metadata.lqip ??
-          builder.image(image).width(20).quality(0).blur(20).auto('format').url()
-        ),
+        src: adjustImageRef.current(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
         width: 1
       }
 

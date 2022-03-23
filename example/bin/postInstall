@@ -3,6 +3,6 @@
 
 mkdir -p ../node_modules
 ln -sfn ../example/node_modules/react/ ../node_modules/react
-ln -sfn ../example/node_modules/@sanity/image-url/ ../node_modules/@sanity/image-url
-ln -sfn ../example/node_modules/@kaliber/use-element-size/ ../node_modules/@kaliber/use-element-size
+ln -sfn ../example/node_modules/@sanity/ ../node_modules/@sanity
+ln -sfn ../example/node_modules/@kaliber/ ../node_modules/@kaliber
 ln -sfn ../../../ ./node_modules/@kaliber/sanity-image
