@@ -1,19 +1,24 @@
-.component {
-  position: absolute;
-  margin: 20px;
+.layout {
+  & > .imageCover {
+    height: 50vh !important;
+    width: 100% !important;
+  }
+
+  & > .imageCropped1To1 {
+    width: 100%;
+    max-width: 1024px !important;
+  }
+
+  & > .imageCropped1To2 {
+    width: 100%;
+    max-width: 720px !important;
+  }
+
+  & > .imageSmall {
+    width: 200px;
+  }
 }
 
-.imageCover {
-  height: 50vh !important;
-  width: 100% !important;
-}
-
-.imageCropped1To1 {
-  width: 100%;
-  max-width: 1024px !important;
-}
-
-.imageCropped1To2 {
-  width: 100%;
-  max-width: 720px !important;
+.imageInline {
+  display: inline-block;
 }

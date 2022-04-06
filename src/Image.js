@@ -76,6 +76,7 @@ function ImageBase({
     throw new Error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
   }
 
+  const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
   const { width, height, size } = useDerivedSizes({
@@ -88,9 +89,8 @@ function ImageBase({
     <img 
       {...imgProps}
       ref={sizeRef}
-      className={layoutClassName}
       sizes={sizes || `${size}px`}
-      {...{ src, srcSet, width, height, style }}
+      {...{ className, src, srcSet, width, height, style }}
     />
   )
 }
