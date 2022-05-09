@@ -6,12 +6,13 @@ const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
 export function Image({
   sanityConfig,
   image,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidth()}
       deriveSizes={deriveSizes()}
     />
@@ -22,13 +23,14 @@ export function ImageCropped({
   sanityConfig,
   image,
   aspectRatio,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
       {...imgProps}
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCropped(aspectRatio)}
     />
@@ -39,12 +41,13 @@ export function ImageCover({
   sanityConfig,
   image,
   aspectRatio,
+  sizes = undefined,
   layoutClassName = undefined, 
   imgProps = {} 
 }) {
   return (
     <ImageBase  
-      {...{ sanityConfig, image, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
       adjustImage={adjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={deriveSizesCover(aspectRatio)}
       style={{
@@ -64,6 +67,7 @@ function ImageBase({
   image,
   adjustImage,
   deriveSizes,
+  sizes = undefined,
   style = {}, 
   imgProps = {}, 
   layoutClassName = undefined 
@@ -72,6 +76,7 @@ function ImageBase({
     throw new Error('Image asset doesn\'t have associated metadata. Did you forget to dereference the asset field (`image{..., asset->}`)?')
   }
 
+  const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
   const { width, height, size } = useDerivedSizes({
@@ -84,9 +89,8 @@ function ImageBase({
     <img 
       {...imgProps}
       ref={sizeRef}
-      className={layoutClassName}
-      sizes={size + 'px'}
-      {...{ src, srcSet, width, height, style }}
+      sizes={sizes || `${size}px`}
+      {...{ className, src, srcSet, width, height, style }}
     />
   )
 }
