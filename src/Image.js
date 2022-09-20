@@ -74,12 +74,18 @@ function ImageBase({
   layoutClassName = undefined
 }) {
   const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
+  const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? image.asset._id)
   const { ref: sizeRef, size: displaySize } = useElementSize()
-  const { src, srcSet } = useSrcSet({ config: sanityConfig, image, adjustImage })
+  const { src, srcSet } = useSrcSet({
+    config: sanityConfig,
+    image,
+    adjustImage,
+    width: dimensions.width
+  })
   const { width, height, size } = useDerivedSizes({
     deriveSizes,
     displaySize,
-    naturalSize: parseDimensionsFromAssetRef(image.asset._ref ?? image.asset._id)
+    naturalSize: dimensions
   })
 
   return (
@@ -92,18 +98,17 @@ function ImageBase({
   )
 }
 
-function useSrcSet({ config, image, adjustImage }) {
+function useSrcSet({ config, image, adjustImage, width }) {
   const builder = imageUrlBuilder(config)
   const adjustImageRef = React.useRef(null)
   adjustImageRef.current = adjustImage
 
   return React.useMemo(
     () => {
-      const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? image.asset._id)
       const [maxSize] = SIZES.slice(-1)
       const sizes = SIZES.slice(0, -1)
-        .filter(w => w < dimensions.width)
-        .concat(Math.min(dimensions.width, maxSize))
+        .filter(w => w < width)
+        .concat(Math.min(width, maxSize))
 
       const thumb = {
         src: adjustImageRef.current(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
@@ -119,7 +124,7 @@ function useSrcSet({ config, image, adjustImage }) {
 
       return { src, srcSet }
     },
-    [image, builder]
+    [image, width, builder]
   )
 }
 
