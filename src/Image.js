@@ -133,7 +133,10 @@ function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
   deriveSizesRef.current = deriveSizes
 
   return React.useMemo(
-    () => deriveSizesRef.current({ naturalSize, displaySize }),
+    () => deriveSizesRef.current({
+      naturalSize: { width: naturalSize.width, height: naturalSize.height },
+      displaySize: { width: displaySize.width, height: displaySize.height }
+    }),
     [naturalSize.width, naturalSize.height, displaySize.width, displaySize.height]
   )
 }
