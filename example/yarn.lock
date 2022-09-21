@@ -1343,10 +1343,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@kaliber/build@^0.0.123":
-  version "0.0.123"
-  resolved "https://registry.yarnpkg.com/@kaliber/build/-/build-0.0.123.tgz#27658d4a4b05e18b37ccefd04bd523f89efa9e0f"
-  integrity sha512-WhaPbatU2A8rzEuTfG79wpP+rmz3NQVOKbeepFHezpDbtdNahenEScCGmY6l75skGsdj3K3TDt8T19hcoLmo4w==
+"@kaliber/build@^0.0.130":
+  version "0.0.130"
+  resolved "https://registry.yarnpkg.com/@kaliber/build/-/build-0.0.130.tgz#64cd2f810abb144550e282024322c4f69c88186c"
+  integrity sha512-fL/1Js6XTO5lB4vgQuWWZvVVwf11BqHsLi3I8c4v5U/1Fif7dKVN5bkMtnX11HD8qsCkquwxQmywckSvPAuCEg==
   dependencies:
     "@babel/core" "^7.11.6"
     "@babel/eslint-parser" "^7.16.5"
@@ -1362,6 +1362,7 @@
     "@babel/runtime" "^7.11.2"
     "@kaliber/config" "^0.0.8"
     "@kaliber/eslint-plugin" "*"
+    "@kaliber/safe-json-stringify" "^1.1.0"
     ansi-regex "^5.0.0"
     babel-loader "^8.0.6"
     cache-loader "^4.1.0"
@@ -1413,13 +1414,13 @@
     react "^17.0.2"
     react-dom "^17.0.2"
     rollbar "^2.19.3"
-    source-map "0.6.1"
     stylelint "^13.7.1"
     stylelint-use-nesting "^3.0.0"
     tapable "^2.0.0"
     terser-webpack-plugin "^4.2.2"
     time-fix-plugin "^2.0.7"
     url-loader "^4.1.0"
+    uuid "^8.3.2"
     walk-sync "^3.0.0"
     webpack "^4.44.2"
     webpack-node-externals "^2.5.2"
@@ -1435,10 +1436,15 @@
   resolved "https://registry.yarnpkg.com/@kaliber/eslint-plugin/-/eslint-plugin-0.0.1.tgz#9d48c09602609c17a7cf8d91a7217d42a4580d0b"
   integrity sha512-TUzSR0hiU0VlSt3MwS+LsoXVkK4wJY0oJd0vTfad+9JgqRF/4dLmjzTqegoiBB7b+pxKDUaptu+R6cWgsO4tKA==
 
-"@kaliber/use-element-size@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@kaliber/use-element-size/-/use-element-size-3.0.0.tgz#a4bbb6f292c53dd4939679cee5c9ccbc07b5a906"
-  integrity sha512-AxusnSHw1BB1nzb+XbT8desnyBEKBGyrnH0hg+39T+/Nzmy2psLm/j0b1FzuBvK9qCTQDD/kfycFnj/1OteZ8w==
+"@kaliber/safe-json-stringify@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@kaliber/safe-json-stringify/-/safe-json-stringify-1.1.0.tgz#5373ed05afe135ab306c64b12125f43ac6d79f4a"
+  integrity sha512-15rvQi6XphQUD9TeChGDyDrrwu4HOLw6OFYshSPbA/D3XcvmgmVZ9TNb80G1RCxqsP7PW99X8blLmZM/Wjl8Lg==
+
+"@kaliber/use-element-size@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@kaliber/use-element-size/-/use-element-size-3.0.1.tgz#4c1a3d143229da47946d8d7fb343785454f1b265"
+  integrity sha512-3Xn6szCTQyTvQObcseAncFoI9kYCnJ5QEDl+2nqkPCYQuTlogiXAYJgKlVC6ZJ7DqNMBNORpAWym+m/g14mEZQ==
   dependencies:
     "@kaliber/use-observed-ref" "^1.0.0"
 
@@ -8983,15 +8989,15 @@ source-map-url@^0.4.0:
   resolved "https://registry.yarnpkg.com/source-map-url/-/source-map-url-0.4.0.tgz#3e935d7ddd73631b97659956d55128e87b5084a3"
   integrity sha1-PpNdfd1zYxuXZZlW1VEo6HtQhKM=
 
-source-map@0.6.1, source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-
 source-map@^0.5.0, source-map@^0.5.6, source-map@^0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
+
+source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
 source-map@~0.7.2:
   version "0.7.3"
@@ -9970,6 +9976,11 @@ uuid@^3.0.1:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3:
   version "2.1.1"
