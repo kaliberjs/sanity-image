@@ -76,7 +76,7 @@ function ImageBase({
   const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
   const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? image.asset._id)
   const { ref: sizeRef, size: displaySize } = useElementSize()
-  const { src, srcSet } = useSrcSet({
+  const { src, srcSet, thumb } = useSrcSet({
     config: sanityConfig,
     image,
     adjustImage,
@@ -93,7 +93,8 @@ function ImageBase({
       {...imgProps}
       ref={sizeRef}
       sizes={sizes || `${size}px`}
-      {...{ className, src, srcSet, width, height, style }}
+      srcSet={(sizes || size > 1) ? srcSet : thumb }
+      {...{ className, src, width, height, style }}
     />
   )
 }
@@ -122,7 +123,7 @@ function useSrcSet({ config, image, adjustImage, width }) {
       const srcSet = [thumb, ...sources].map(x => `${x.src} ${x.width}w`).join(',')
 
 
-      return { src, srcSet }
+      return { src, srcSet, thumb: `${thumb.src} 1w` }
     },
     [image, width, builder]
   )
