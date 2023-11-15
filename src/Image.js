@@ -54,7 +54,7 @@ export function ImageCover({
       style={{
         objectFit: 'cover',
         ...image.hotspot && {
-          // Because our cropped image size may not match the actual display size, 
+          // Because our cropped image size may not match the actual display size,
           // it's useful to set the object-position the hotspot x and y values
           objectPosition: `${image.hotspot.x * 100}% ${image.hotspot.y * 100}%`
         }
@@ -100,7 +100,7 @@ function ImageBase({
 }
 
 function useSrcSet({ config, image, adjustImage, width }) {
-  const builder = imageUrlBuilder(config)
+  const builder = React.useMemo(() => imageUrlBuilder(config), [config])
   const adjustImageRef = React.useRef(null)
   adjustImageRef.current = adjustImage
 
@@ -166,7 +166,7 @@ function deriveSizesCropped(aspectRatio) {
   })
 }
 
-// deriveSizesCover can return a sizes value larger than the actual display 
+// deriveSizesCover can return a sizes value larger than the actual display
 // width in case the image is scaled up by object-fit
 function deriveSizesCover(aspectRatio) {
   return ({ naturalSize, displaySize }) => {
