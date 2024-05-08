@@ -125,7 +125,7 @@ function useSrcSet({ config, image, adjustImage, width }) {
 
       return { src, srcSet, thumb: `${thumb.src} 1w` }
     },
-    [image, width, builder]
+    [image, width, builder, adjustImage]
   )
 }
 
