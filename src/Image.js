@@ -138,62 +138,58 @@ function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
 }
 
 function useAdjustImageWidth() {
-  return React.useCallback(adjustImageWidth(), [])
-}
-
-function adjustImageWidth() {
-  return (image, width) => image.width(width)
+  return React.useCallback(
+    (image, width) => image.width(width),
+    []
+  )
 }
 
 function useAdjustImageWidthAndCrop(aspectRatio) {
-  return React.useCallback(adjustImageWidthAndCrop(aspectRatio), [aspectRatio])
-}
-
-function adjustImageWidthAndCrop(aspectRatio) {
-  return (image, width) => image.width(width).height(Math.round(width / aspectRatio))
+  return React.useCallback(
+    (image, width) => image.width(width).height(Math.round(width / aspectRatio)),
+    [aspectRatio]
+  )
 }
 
 function useDeriveSizes() {
-  return React.useCallback(deriveSizes(), [])
-}
-
-function deriveSizes() {
-  return ({ naturalSize, displaySize }) => ({
-    width: naturalSize.width,
-    height: naturalSize.height,
-    size: Math.max(1, displaySize.width)
-  })
+  return React.useCallback(
+    ({ naturalSize, displaySize }) => ({
+      width: naturalSize.width,
+      height: naturalSize.height,
+      size: Math.max(1, displaySize.width)
+    }),
+    []
+  )
 }
 
 function useDeriveSizesCropped(aspectRatio) {
-  return React.useCallback(deriveSizesCropped(aspectRatio), [aspectRatio])
-}
-
-function deriveSizesCropped(aspectRatio) {
-  return ({ naturalSize, displaySize }) => ({
-    width: naturalSize.width,
-    height: naturalSize.width / aspectRatio,
-    size: Math.max(1, displaySize.width)
-  })
-}
-
-function useDeriveSizesCover(aspectRatio) {
-  return React.useCallback(deriveSizesCover(aspectRatio), [aspectRatio])
-}
-// deriveSizesCover can return a sizes value larger than the actual display
-// width in case the image is scaled up by object-fit
-function deriveSizesCover(aspectRatio) {
-  return ({ naturalSize, displaySize }) => {
-    const size = (displaySize.width && displaySize.height)
-      ? Math.max(displaySize.height * aspectRatio, displaySize.width)
-      : 0
-
-    return {
+  return React.useCallback(
+    ({ naturalSize, displaySize }) => ({
       width: naturalSize.width,
       height: naturalSize.width / aspectRatio,
-      size: Math.max(1, size)
-    }
-  }
+      size: Math.max(1, displaySize.width)
+    }),
+    [aspectRatio]
+  )
+}
+
+// deriveSizesCover can return a sizes value larger than the actual display
+// width in case the image is scaled up by object-fit
+function useDeriveSizesCover(aspectRatio) {
+  return React.useCallback(
+    ({ naturalSize, displaySize }) => {
+      const size = (displaySize.width && displaySize.height)
+        ? Math.max(displaySize.height * aspectRatio, displaySize.width)
+        : 0
+
+      return {
+        width: naturalSize.width,
+        height: naturalSize.width / aspectRatio,
+        size: Math.max(1, size)
+      }
+    },
+    [aspectRatio]
+  )
 }
 
 function parseDimensionsFromAssetRef(ref) {
