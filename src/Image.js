@@ -14,8 +14,8 @@ export function Image({
   return (
     <ImageBase
       {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
-      adjustImage={adjustImageWidth()}
-      deriveSizes={deriveSizes()}
+      adjustImage={useAdjustImageWidth()}
+      deriveSizes={useDeriveSizes()}
     />
   )
 }
@@ -32,8 +32,8 @@ export function ImageCropped({
     <ImageBase
       {...imgProps}
       {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
-      adjustImage={adjustImageWidthAndCrop(aspectRatio)}
-      deriveSizes={deriveSizesCropped(aspectRatio)}
+      adjustImage={useAdjustImageWidthAndCrop(aspectRatio)}
+      deriveSizes={useDeriveSizesCropped(aspectRatio)}
     />
   )
 }
@@ -49,8 +49,8 @@ export function ImageCover({
   return (
     <ImageBase
       {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
-      adjustImage={adjustImageWidthAndCrop(aspectRatio)}
-      deriveSizes={deriveSizesCover(aspectRatio)}
+      adjustImage={useAdjustImageWidthAndCrop(aspectRatio)}
+      deriveSizes={useDeriveSizesCover(aspectRatio)}
       style={{
         objectFit: 'cover',
         ...image.hotspot && {
@@ -101,8 +101,6 @@ function ImageBase({
 
 function useSrcSet({ config, image, adjustImage, width }) {
   const builder = React.useMemo(() => imageUrlBuilder(config), [config])
-  const adjustImageRef = React.useRef(null)
-  adjustImageRef.current = adjustImage
 
   return React.useMemo(
     () => {
@@ -112,12 +110,12 @@ function useSrcSet({ config, image, adjustImage, width }) {
         .concat(Math.min(width, maxSize))
 
       const thumb = {
-        src: adjustImageRef.current(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
+        src: adjustImage(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
         width: 1
       }
 
       const baseImage = builder.image(image).quality(80).auto('format')
-      const sources = sizes.map(width => ({ src: adjustImageRef.current(baseImage, width).url(), width }))
+      const sources = sizes.map(width => ({ src: adjustImage(baseImage, width).url(), width }))
 
       const src = sources.slice(-1)[0].src
       const srcSet = [thumb, ...sources].map(x => `${x.src} ${x.width}w`).join(',')
@@ -125,29 +123,38 @@ function useSrcSet({ config, image, adjustImage, width }) {
 
       return { src, srcSet, thumb: `${thumb.src} 1w` }
     },
-    [image, width, builder]
+    [image, width, builder, adjustImage]
   )
 }
 
 function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
-  const deriveSizesRef = React.useRef(null)
-  deriveSizesRef.current = deriveSizes
-
   return React.useMemo(
-    () => deriveSizesRef.current({
+    () => deriveSizes({
       naturalSize: { width: naturalSize.width, height: naturalSize.height },
       displaySize: { width: displaySize.width, height: displaySize.height }
     }),
-    [naturalSize.width, naturalSize.height, displaySize.width, displaySize.height]
+    [naturalSize.width, naturalSize.height, displaySize.width, displaySize.height, deriveSizes]
   )
+}
+
+function useAdjustImageWidth() {
+  return React.useCallback(adjustImageWidth(), [])
 }
 
 function adjustImageWidth() {
   return (image, width) => image.width(width)
 }
 
+function useAdjustImageWidthAndCrop(aspectRatio) {
+  return React.useCallback(adjustImageWidthAndCrop(aspectRatio), [aspectRatio])
+}
+
 function adjustImageWidthAndCrop(aspectRatio) {
   return (image, width) => image.width(width).height(Math.round(width / aspectRatio))
+}
+
+function useDeriveSizes() {
+  return React.useCallback(deriveSizes(), [])
 }
 
 function deriveSizes() {
@@ -158,6 +165,10 @@ function deriveSizes() {
   })
 }
 
+function useDeriveSizesCropped(aspectRatio) {
+  return React.useCallback(deriveSizesCropped(aspectRatio), [aspectRatio])
+}
+
 function deriveSizesCropped(aspectRatio) {
   return ({ naturalSize, displaySize }) => ({
     width: naturalSize.width,
@@ -166,6 +177,9 @@ function deriveSizesCropped(aspectRatio) {
   })
 }
 
+function useDeriveSizesCover(aspectRatio) {
+  return React.useCallback(deriveSizesCover(aspectRatio), [aspectRatio])
+}
 // deriveSizesCover can return a sizes value larger than the actual display
 // width in case the image is scaled up by object-fit
 function deriveSizesCover(aspectRatio) {
