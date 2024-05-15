@@ -9,12 +9,12 @@
     "@sanity/image-url": "^1.0.1"
   },
   "scripts": {
-    "build": "NODE_ENV=production kaliber-build",
-    "lint": "kaliber-lint",
+    "start": "npm-run-all --parallel watch serve.dev",
+    "watch": "CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps --openssl-legacy-provider' kaliber-watch",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production kaliber-build",
     "serve": "kaliber-serve",
-    "serve:dev": "PORT=8000 CONFIG_ENV=dev kaliber-serve",
-    "start": "npm-run-all --parallel watch serve:dev",
-    "watch": "CONFIG_ENV=dev kaliber-watch",
+    "serve.dev": "PORT=8000 CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps' kaliber-serve",
+    "lint": "kaliber-lint",
     "postinstall": "./bin/postInstall"
   },
   "devDependencies": {
