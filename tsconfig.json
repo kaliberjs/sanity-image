@@ -1,32 +1,24 @@
 {
-  "typeAcquisition": {
-    "enable": true
-  },
   "include": [
+    "./index.js",
     "./src/**/*",
-    "./node_modules/**.*",
-    "./types/**/*"
+    "./scripts/**/*",
   ],
   "compilerOptions": {
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "jsx": "react",
-    "baseUrl": ".",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
+    "strict": true,
+    "allowUmdGlobalAccess": true,
+    "resolveJsonModule": true,
+    "maxNodeModuleJsDepth": 3,
+    "allowImportingTsExtensions": true,
     "paths": {
-      "/*?universal": [
-        "src/*"
-      ],
-      "/*": [
-        "src/*"
-      ]
+       "*": ["./node_modules/@types/*", "./typescript/node_modules/*"]
     }
   }
 }

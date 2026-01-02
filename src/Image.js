@@ -1,9 +1,24 @@
 import { useElementSize } from '@kaliber/use-element-size'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
+/** @import { SanityImageObject, SanityAsset, ImageUrlBuilder } from '@sanity/image-url' */
+/** @import { CSSProperties } from 'react' */
+
+/** @typedef {Parameters<typeof createImageUrlBuilder>[0]} SanityConfig */
+/** @typedef {(sizes: { naturalSize: Area, displaySize: Area }) => (Area & { size: number })} DeriveSizes */
+/** @typedef {{ width: number, height: number }} Area */
 
 const exampleAssetRef = 'image-3b90af5f4677efbc62374dcfda799040b699b4c5-4928x3280-jpg'
 const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
 
+/**
+ * @arg {{
+ *   sanityConfig: SanityConfig,
+ *   image: SanityImageObject,
+ *   sizes?: string,
+ *   layoutClassName?: string,
+ *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
+ * }} props
+ */
 export function Image({
   sanityConfig,
   image,
@@ -20,6 +35,16 @@ export function Image({
   )
 }
 
+/**
+ * @arg {{
+ *   sanityConfig: SanityConfig,
+ *   image: SanityImageObject,
+ *   aspectRatio: number,
+ *   sizes?: string,
+ *   layoutClassName?: string,
+ *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
+ * }} props
+ */
 export function ImageCropped({
   sanityConfig,
   image,
@@ -38,6 +63,16 @@ export function ImageCropped({
   )
 }
 
+/**
+ * @arg {{
+ *   sanityConfig: SanityConfig,
+ *   image: SanityImageObject,
+ *   aspectRatio: number,
+ *   sizes?: string,
+ *   layoutClassName?: string,
+ *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
+ * }} props
+ */
 export function ImageCover({
   sanityConfig,
   image,
@@ -63,6 +98,18 @@ export function ImageCover({
   )
 }
 
+/**
+ * @arg {{
+ *   sanityConfig: SanityConfig,
+ *   image: SanityImageObject,
+ *   adjustImage(baseImage: ImageUrlBuilder, width: number): ImageUrlBuilder,
+ *   deriveSizes: DeriveSizes,
+ *   sizes?: string,
+ *   style?: CSSProperties,
+ *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
+ *   layoutClassName?: string,
+ * }} props
+ */
 function ImageBase({
   sanityConfig,
   image,
@@ -74,7 +121,7 @@ function ImageBase({
   layoutClassName = undefined
 }) {
   const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
-  const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? image.asset._id)
+  const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? /** @type {SanityAsset} */ (image.asset)._id)
   const { ref: sizeRef, size: displaySize } = useElementSize()
   const { src, srcSet, thumb } = useSrcSet({
     config: sanityConfig,
@@ -89,18 +136,27 @@ function ImageBase({
   })
 
   return (
+    // eslint-disable-next-line jsx-a11y/alt-text
     <img
       {...imgProps}
       ref={sizeRef}
       sizes={sizes || `${size}px`}
-      srcSet={(sizes || size > 1) ? srcSet : thumb }
+      srcSet={(sizes || size > 1) ? srcSet : thumb}
       {...{ className, src, width, height, style }}
     />
   )
 }
 
+/**
+ * @arg {{
+ *   config: SanityConfig,
+ *   image: SanityImageObject,
+ *   adjustImage(baseImage: ImageUrlBuilder, width: number): ImageUrlBuilder,
+ *   width: number,
+ * }} props
+ */
 function useSrcSet({ config, image, adjustImage, width }) {
-  const builder = React.useMemo(() => imageUrlBuilder(config), [config])
+  const builder = React.useMemo(() => createImageUrlBuilder(config), [config])
 
   return React.useMemo(
     () => {
@@ -127,6 +183,13 @@ function useSrcSet({ config, image, adjustImage, width }) {
   )
 }
 
+/**
+ * @arg {{
+ *   deriveSizes: DeriveSizes,
+ *   naturalSize: Area,
+ *   displaySize: Area,
+ * }} props
+ */
 function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
   return React.useMemo(
     () => deriveSizes({
@@ -139,13 +202,22 @@ function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
 
 function useAdjustImageWidth() {
   return React.useCallback(
+    /**
+     * @arg {ImageUrlBuilder} image
+     * @arg {number} width
+     */
     (image, width) => image.width(width),
     []
   )
 }
 
+/** @arg {number} aspectRatio */
 function useAdjustImageWidthAndCrop(aspectRatio) {
   return React.useCallback(
+    /**
+     * @arg {ImageUrlBuilder} image
+     * @arg {number} width
+     */
     (image, width) => image.width(width).height(Math.round(width / aspectRatio)),
     [aspectRatio]
   )
@@ -153,6 +225,7 @@ function useAdjustImageWidthAndCrop(aspectRatio) {
 
 function useDeriveSizes() {
   return React.useCallback(
+    /** @arg {{ naturalSize: Area, displaySize: Area }} props */
     ({ naturalSize, displaySize }) => ({
       width: naturalSize.width,
       height: naturalSize.height,
@@ -162,8 +235,10 @@ function useDeriveSizes() {
   )
 }
 
+/** @arg {number} aspectRatio */
 function useDeriveSizesCropped(aspectRatio) {
   return React.useCallback(
+    /** @arg {{ naturalSize: Area, displaySize: Area }} props */
     ({ naturalSize, displaySize }) => ({
       width: naturalSize.width,
       height: naturalSize.width / aspectRatio,
@@ -173,10 +248,15 @@ function useDeriveSizesCropped(aspectRatio) {
   )
 }
 
-// deriveSizesCover can return a sizes value larger than the actual display
-// width in case the image is scaled up by object-fit
+/**
+ * deriveSizesCover can return a sizes value larger than the actual display
+ * width in case the image is scaled up by object-fit
+ *
+ * @arg {number} aspectRatio
+ */
 function useDeriveSizesCover(aspectRatio) {
   return React.useCallback(
+    /** @arg {{ naturalSize: Area, displaySize: Area }} props */
     ({ naturalSize, displaySize }) => {
       const size = (displaySize.width && displaySize.height)
         ? Math.max(displaySize.height * aspectRatio, displaySize.width)
@@ -192,6 +272,7 @@ function useDeriveSizesCover(aspectRatio) {
   )
 }
 
+/** @arg {string} ref */
 function parseDimensionsFromAssetRef(ref) {
   const [, id, dimensionString, format] = ref.split('-')
 
@@ -206,6 +287,7 @@ function parseDimensionsFromAssetRef(ref) {
   return { width, height }
 }
 
+/** @arg {string} ref */
 function malformedAssetRefError(ref) {
   return new Error(`Malformed asset _ref ${ref}. Expected an id like ${exampleAssetRef}.`)
 }

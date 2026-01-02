@@ -1,0 +1,22 @@
+{
+  "include": [
+    "./config/**/*",
+    "./src/**/*",
+    "./types/**/*",
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "allowUmdGlobalAccess": true,
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+    "maxNodeModuleJsDepth": 3,
+    "paths": {
+      "/*": ["./src/*"]
+    }
+  }
+}

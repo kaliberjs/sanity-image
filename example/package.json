@@ -4,20 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@kaliber/build": "^0.0.130",
-    "@kaliber/use-element-size": "^3.0.1",
-    "@sanity/image-url": "^1.0.1"
+    "@kaliber/build": "^3.01.0",
+    "@kaliber/sanity-image": "link:../",
+    "@kaliber/serve": "^1.0.0",
+    "@kaliber/use-element-size": "^4.0.0",
+    "@kaliber/use-observed-ref": "^1.0.0",
+    "@sanity/image-url": "^2.0.0"
   },
   "scripts": {
-    "start": "npm-run-all --parallel watch serve.dev",
-    "watch": "CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps --openssl-legacy-provider' kaliber-watch",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production kaliber-build",
-    "serve": "kaliber-serve",
-    "serve.dev": "PORT=8000 CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps' kaliber-serve",
-    "lint": "kaliber-lint",
-    "postinstall": "./bin/postInstall"
+    "start": "npm run watch & npm run serve.dev & wait",
+    "watch": "CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps --preserve-symlinks' kaliber-watch",
+    "serve.dev": "PORT=8000 CONFIG_ENV=dev NODE_OPTIONS='--enable-source-maps --preserve-symlinks' kaliber-serve"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "@kaliber/eslint-plugin": "^1.0.0",
+    "@kaliber/stylelint-plugin": "^1.0.0",
+    "@types/react": "^18.0.0"
   }
 }

@@ -1,7 +1,7 @@
 import '/index.css'
 import '/reset.css'
 import config from '@kaliber/config'
-import App from '/App?universal'
+import App from '/App.universal'
 import javascript from '@kaliber/build/lib/javascript'
 import stylesheet from '@kaliber/build/lib/stylesheet'
 

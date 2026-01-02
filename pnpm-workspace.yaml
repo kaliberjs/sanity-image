@@ -1,0 +1,10 @@
+autoInstallPeers: false
+strictPeerDependencies: true
+
+publicHoistPattern:
+  - eslint
+  - eslint-plugin-*
+  - '@babel/eslint-parser'
+  - '@babel/preset-react'
+  - '@types/express-serve-static-core'
+  - '@types/serve-static'

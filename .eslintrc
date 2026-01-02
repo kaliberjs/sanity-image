@@ -1,3 +1,10 @@
 {
-  "extends": "./node_modules/@kaliber/build/.eslintrc"
+  "extends": "./node_modules/@kaliber/eslint-plugin/.eslintrc",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "typescript/node_modules"]
+      }
+    }
+  }
 }
