@@ -1,7 +1,7 @@
 export const image = {
   '_type': 'image',
   'asset': {
-    '_ref': 'image-3b90af5f4677efbc62374dcfda799040b699b4c5-4928x3280-jpg', // This is an actual asset in the kaliber-sanity-template studio
+    '_ref': 'image-1b0aac6595d2eff3744a04bd93c55a5548ef75f8-6048x4006-webp', // This is an actual asset in the kaliber-sanity-template studio
     '_type': 'reference'
   },
   'crop': {
@@ -23,85 +23,87 @@ export const image = {
 export const imageWithDereferencedAsset = {
   '_type': 'image',
   'asset': {
-    '_createdAt': '2021-12-10T08:18:02Z',
-    '_id': 'image-3b90af5f4677efbc62374dcfda799040b699b4c5-4928x3280-jpg',
-    '_rev': 'SVWB3nzlMSR5ytjXeXWNgg',
+    '_createdAt': '2026-03-05T14:14:17Z',
+    '_id': 'image-1b0aac6595d2eff3744a04bd93c55a5548ef75f8-6048x4006-webp',
+    '_originalId': 'image-1b0aac6595d2eff3744a04bd93c55a5548ef75f8-6048x4006-webp',
+    '_rev': 'hb0MtPC3EmJb2FN3vos8I8',
     '_type': 'sanity.imageAsset',
-    '_updatedAt': '2021-12-10T08:18:02Z',
-    'assetId': '3b90af5f4677efbc62374dcfda799040b699b4c5',
-    'extension': 'jpg',
+    '_updatedAt': '2026-03-05T14:14:17Z',
+    'assetId': '1b0aac6595d2eff3744a04bd93c55a5548ef75f8',
+    'extension': 'webp',
     'metadata': {
       '_type': 'sanity.imageMetadata',
-      'blurHash': 'VTFsS*~qR4bIM{~q%MRPofofMxtRWXRjkCWBt8t8RjWB',
+      'blurHash': 'VLCGx_^i000gcF?w?bia4m9yM{tS-;vyDikXbHoyxuwH',
       'dimensions': {
         '_type': 'sanity.imageDimensions',
-        'aspectRatio': 1.502439024390244,
-        'height': 3280,
-        'width': 4928
+        'aspectRatio': 1.509735396904643,
+        'height': 4006,
+        'width': 6048
       },
       'hasAlpha': false,
       'isOpaque': true,
-      'lqip': 'data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQGB//EACMQAAIBBAEDBQAAAAAAAAAAAAECAwAEBRESBhMhFjFBYYH/xAAWAQEBAQAAAAAAAAAAAAAAAAAEAQL/xAAaEQADAAMBAAAAAAAAAAAAAAAAAQISE0FR/9oADAMBAAIRAxEAPwDS3y1qLUNcRRPCRolkBFR2fxPTGYjeYY+z7i+Oajg2/wAqS9SXtpZCKXjcRMumV/n7qMuc1d7Zlbiu98QaXE+hab4I5XoWSfITvbRlYix4gsDRScuXuzISJXG/PvRU1Qbzpn//2Q==',
+      'lqip': 'data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAcCBQYI/8QAJBAAAgAFAwQDAAAAAAAAAAAAAQIAAwQFEQYHMQgSIlElQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EAB8RAAEDAwUAAAAAAAAAAAAAAAEAAgMEEjITITGhsf/aAAwDAQACEQMRAD8AxnTfuPKsNc+n70/xlYcKzcI0W/UFpSSs16ulGUPkGHBH5HOiMyOGQkMDkEfUOO3avuF928m0tyxNNGO1JhPkR6MU0kljzG7F3qmrI9Rglbk3sJOMpViDyIIlPbunOfZggDsU44X/2Q==',
       'palette': {
         '_type': 'sanity.imagePalette',
         'darkMuted': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#2a3d54',
+          'background': '#2c4454',
           'foreground': '#fff',
-          'population': 8.57,
+          'population': 0,
           'title': '#fff'
         },
         'darkVibrant': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#041c4e',
+          'background': '#044c84',
           'foreground': '#fff',
-          'population': 0.02,
+          'population': 0.04,
           'title': '#fff'
         },
         'dominant': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#596f86',
+          'background': '#97765d',
           'foreground': '#fff',
-          'population': 8.68,
+          'population': 0.18,
           'title': '#fff'
         },
         'lightMuted': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#adc1d5',
+          'background': '#b7c1c8',
           'foreground': '#000',
-          'population': 1.9,
+          'population': 0.14,
           'title': '#fff'
         },
         'lightVibrant': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#a9c5e9',
+          'background': '#7cccfc',
           'foreground': '#000',
-          'population': 0.32,
+          'population': 0.03,
           'title': '#fff'
         },
         'muted': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#596f86',
+          'background': '#97765d',
           'foreground': '#fff',
-          'population': 8.68,
+          'population': 0.18,
           'title': '#fff'
         },
         'vibrant': {
           '_type': 'sanity.imagePaletteSwatch',
-          'background': '#6090ca',
+          'background': '#d8711b',
           'foreground': '#fff',
-          'population': 0.01,
+          'population': 0.04,
           'title': '#fff'
         }
-      }
+      },
+      'thumbHash': 'UOcVHYQIh4eqRoeHeYaHh+92+F6H'
     },
-    'mimeType': 'image/jpeg',
-    'originalFilename': 'nasa-yZygONrUBe8-unsplash.jpg',
-    'path': 'images/5r7p2zew/dev/3b90af5f4677efbc62374dcfda799040b699b4c5-4928x3280.jpg',
-    'sha1hash': '3b90af5f4677efbc62374dcfda799040b699b4c5',
-    'size': 1526320,
-    'uploadId': 'qnVFs1adMszmPFtbqvddEWggFFvd58wz',
-    'url': 'https://cdn.sanity.io/images/5r7p2zew/dev/3b90af5f4677efbc62374dcfda799040b699b4c5-4928x3280.jpg'
+    'mimeType': 'image/webp',
+    'originalFilename': 'e776128754b75a05812fc91c0d3a52c0-6048x4006.webp',
+    'path': 'images/5r7p2zew/dev/1b0aac6595d2eff3744a04bd93c55a5548ef75f8-6048x4006.webp',
+    'sha1hash': '1b0aac6595d2eff3744a04bd93c55a5548ef75f8',
+    'size': 181244,
+    'uploadId': 'PznpnAuSIuFvGKmioMknbfkgsKrvQEk1',
+    'url': 'https://cdn.sanity.io/images/5r7p2zew/dev/1b0aac6595d2eff3744a04bd93c55a5548ef75f8-6048x4006.webp'
   },
   'crop': {
     '_type': 'sanity.imageCrop',
