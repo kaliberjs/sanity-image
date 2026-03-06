@@ -8,18 +8,20 @@ Even though the components work without a `sizes` prop, they *do* accept one. Th
 
 ## Installation
 
-Add the following libraries to your `compileWithBabel` array:
-
 ```
 yarn add @kaliber/use-element-size @kaliber/sanity-image @sanity/image-url
 ```
 
-```
-compileWithBabel: [
-  /@kaliber\/sanity-image/,
-  /@kaliber\/use-element-size/,
-  /@kaliber\/use-observed-ref/,
-]
+Add the following to your `includeInServerCompilation` array in your kaliber build config:
+
+```js
+kaliber: {
+  includeInServerCompilation: [
+    /^@kaliber\/sanity-image/,
+    /^@kaliber\/use-element-size/,
+    /^@kaliber\/use-observed-ref/,
+  ]
+}
 ```
 
 ## Usage
