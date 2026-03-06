@@ -1,20 +1,20 @@
 .layout {
-  & > .imageCover {
+  & > .imageCoverLayout {
     height: 50vh !important;
     width: 100% !important;
   }
 
-  & > .imageCropped1To1 {
+  & > .imageCropped1To1Layout {
     width: 100%;
     max-width: 1024px !important;
   }
 
-  & > .imageCropped1To2 {
+  & > .imageCropped1To2Layout {
     width: 100%;
     max-width: 720px !important;
   }
 
-  & > .imageSmall {
+  & > .imageSmallLayout {
     width: 200px;
   }
 }

@@ -6,11 +6,13 @@ const sanity = {
 
 module.exports = {
   kaliber: {
-    compileWithBabel: [
-      /@kaliber\/use-observed-ref/,
-      /@kaliber\/use-element-size/,
-      /@kaliber\/sanity-image/
-    ]
+    includeInServerCompilation: [
+      /^@kaliber\/use-observed-ref/,
+      /^@kaliber\/use-element-size/,
+      /^@kaliber\/sanity-image/
+    ],
+    /** @arg {Error} e */
+    reportError(e) { console.error(e) },
   },
   client: {
     sanity: {
