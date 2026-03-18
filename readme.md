@@ -94,9 +94,7 @@ function Component({ image }) {
 ```
 
 ### LQIP (Low-Quality Image Placeholder)
-All components accept an optional `lqip` prop. When provided, the base64 data URI is rendered as an inline CSS background on the `<img>` element. This means the placeholder is visible **immediately** on first paint — no network request needed.
-
-When the real image loads, it naturally covers the placeholder.
+All components accept an optional `lqip` prop. When provided, the component sets a `--lqip` CSS custom property on the `<img>` element containing the data URI, and adds a `data-loaded` attribute once the real image has loaded. This gives you full control over placeholder rendering via CSS.
 
 Query the LQIP data URI from Sanity using GROQ:
 ```groq
@@ -123,6 +121,18 @@ function Component({ image }) {
       {...{ image }}
     />
   )
+}
+```
+
+Add CSS to display the placeholder and hide it on load:
+```css
+img[style*='--lqip'] {
+  background-image: var(--lqip);
+  background-size: cover;
+}
+
+img[data-loaded] {
+  background-image: none;
 }
 ```
 

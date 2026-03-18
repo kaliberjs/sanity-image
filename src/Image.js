@@ -128,21 +128,12 @@ function ImageBase({
   imgProps = {},
   layoutClassName = undefined
 }) {
-  const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
-  const dimensions = parseDimensionsFromAssetRef(image.asset._ref ?? /** @type {SanityAsset} */ (image.asset)._id)
+  const [loaded, setLoaded] = React.useState(false)
   const { ref: sizeRef, size: displaySize } = useElementSize()
-  const { src, srcSet, thumb } = useSrcSet({
-    config: sanityConfig,
-    image,
-    adjustImage,
-    width: dimensions.width,
-    hasLqip: Boolean(lqip)
-  })
-  const { width, height, size } = useDerivedSizes({
-    deriveSizes,
-    displaySize,
-    naturalSize: dimensions
-  })
+  const { src, srcSet, thumb } = useSrcSet({ sanityConfig, image, adjustImage, hasLqip: Boolean(lqip) })
+  const { width, height, size } = useDerivedSizes({ image, deriveSizes, displaySize })
+
+  const className = [imgProps.className, layoutClassName].filter(Boolean).join(' ')
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
@@ -152,8 +143,10 @@ function ImageBase({
       sizes={sizes || `${size}px`}
       srcSet={(sizes || size > 1) ? srcSet : thumb}
       {...{ className, src, width, height }}
+      onLoad={lqip ? () => setLoaded(true) : undefined}
+      data-loaded={loaded || undefined}
       style={{
-        ...lqip && { backgroundImage: `url(${lqip})`, backgroundSize: 'cover' },
+        ...lqip && { '--lqip': `url(${lqip})` },
         ...style,
       }}
     />
@@ -162,15 +155,15 @@ function ImageBase({
 
 /**
  * @arg {{
- *   config: SanityConfig,
+ *   sanityConfig: SanityConfig,
  *   image: SanityImageObject,
  *   adjustImage(baseImage: ImageUrlBuilder, width: number): ImageUrlBuilder,
- *   width: number,
  *   hasLqip: boolean,
  * }} props
  */
-function useSrcSet({ config, image, adjustImage, width, hasLqip }) {
-  const builder = React.useMemo(() => createImageUrlBuilder(config), [config])
+function useSrcSet({ sanityConfig, image, adjustImage, hasLqip }) {
+  const builder = React.useMemo(() => createImageUrlBuilder(sanityConfig), [sanityConfig])
+  const { width } = parseDimensionsFromAssetRef(getAssetRef(image))
 
   return React.useMemo(
     () => {
@@ -208,12 +201,13 @@ function formatSrcSet(sources) {
 
 /**
  * @arg {{
+ *   image: SanityImageObject,
  *   deriveSizes: DeriveSizes,
- *   naturalSize: Area,
  *   displaySize: Area,
  * }} props
  */
-function useDerivedSizes({ deriveSizes, naturalSize, displaySize }) {
+function useDerivedSizes({ image, deriveSizes, displaySize }) {
+  const naturalSize = parseDimensionsFromAssetRef(getAssetRef(image))
   return React.useMemo(
     () => deriveSizes({
       naturalSize: { width: naturalSize.width, height: naturalSize.height },
@@ -308,6 +302,11 @@ function parseDimensionsFromAssetRef(ref) {
   if (!(isFinite(width) && isFinite(height))) throw malformedAssetRefError(ref)
 
   return { width, height }
+}
+
+/** @arg {SanityImageObject} image */
+function getAssetRef(image) {
+  return image.asset._ref ?? /** @type {SanityAsset} */ (image.asset)._id
 }
 
 /** @arg {string} ref */
