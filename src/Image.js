@@ -14,6 +14,7 @@ const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
  * @arg {{
  *   sanityConfig: SanityConfig,
  *   image: SanityImageObject,
+ *   lqip?: string,
  *   sizes?: string,
  *   layoutClassName?: string,
  *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
@@ -22,13 +23,14 @@ const SIZES = [320, 480, 720, 1024, 1440, 1920, 2400, 3000, 3600]
 export function Image({
   sanityConfig,
   image,
+  lqip = undefined,
   sizes = undefined,
   layoutClassName = undefined,
   imgProps = {}
 }) {
   return (
     <ImageBase
-      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, lqip, sizes, layoutClassName, imgProps }}
       adjustImage={useAdjustImageWidth()}
       deriveSizes={useDeriveSizes()}
     />
@@ -40,6 +42,7 @@ export function Image({
  *   sanityConfig: SanityConfig,
  *   image: SanityImageObject,
  *   aspectRatio: number,
+ *   lqip?: string,
  *   sizes?: string,
  *   layoutClassName?: string,
  *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
@@ -49,6 +52,7 @@ export function ImageCropped({
   sanityConfig,
   image,
   aspectRatio,
+  lqip = undefined,
   sizes = undefined,
   layoutClassName = undefined,
   imgProps = {}
@@ -56,7 +60,7 @@ export function ImageCropped({
   return (
     <ImageBase
       {...imgProps}
-      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, lqip, sizes, layoutClassName, imgProps }}
       adjustImage={useAdjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={useDeriveSizesCropped(aspectRatio)}
     />
@@ -68,6 +72,7 @@ export function ImageCropped({
  *   sanityConfig: SanityConfig,
  *   image: SanityImageObject,
  *   aspectRatio: number,
+ *   lqip?: string,
  *   sizes?: string,
  *   layoutClassName?: string,
  *   imgProps?: React.ImgHTMLAttributes<HTMLImageElement>,
@@ -77,13 +82,14 @@ export function ImageCover({
   sanityConfig,
   image,
   aspectRatio,
+  lqip = undefined,
   sizes = undefined,
   layoutClassName = undefined,
   imgProps = {}
 }) {
   return (
     <ImageBase
-      {...{ sanityConfig, image, sizes, layoutClassName, imgProps }}
+      {...{ sanityConfig, image, lqip, sizes, layoutClassName, imgProps }}
       adjustImage={useAdjustImageWidthAndCrop(aspectRatio)}
       deriveSizes={useDeriveSizesCover(aspectRatio)}
       style={{
@@ -102,6 +108,7 @@ export function ImageCover({
  * @arg {{
  *   sanityConfig: SanityConfig,
  *   image: SanityImageObject,
+ *   lqip?: string,
  *   adjustImage(baseImage: ImageUrlBuilder, width: number): ImageUrlBuilder,
  *   deriveSizes: DeriveSizes,
  *   sizes?: string,
@@ -113,6 +120,7 @@ export function ImageCover({
 function ImageBase({
   sanityConfig,
   image,
+  lqip = undefined,
   adjustImage,
   deriveSizes,
   sizes = undefined,
@@ -127,7 +135,8 @@ function ImageBase({
     config: sanityConfig,
     image,
     adjustImage,
-    width: dimensions.width
+    width: dimensions.width,
+    hasLqip: Boolean(lqip)
   })
   const { width, height, size } = useDerivedSizes({
     deriveSizes,
@@ -142,7 +151,11 @@ function ImageBase({
       ref={sizeRef}
       sizes={sizes || `${size}px`}
       srcSet={(sizes || size > 1) ? srcSet : thumb}
-      {...{ className, src, width, height, style }}
+      {...{ className, src, width, height }}
+      style={{
+        ...lqip && { backgroundImage: `url(${lqip})`, backgroundSize: 'cover' },
+        ...style,
+      }}
     />
   )
 }
@@ -153,34 +166,44 @@ function ImageBase({
  *   image: SanityImageObject,
  *   adjustImage(baseImage: ImageUrlBuilder, width: number): ImageUrlBuilder,
  *   width: number,
+ *   hasLqip: boolean,
  * }} props
  */
-function useSrcSet({ config, image, adjustImage, width }) {
+function useSrcSet({ config, image, adjustImage, width, hasLqip }) {
   const builder = React.useMemo(() => createImageUrlBuilder(config), [config])
 
   return React.useMemo(
     () => {
-      const [maxSize] = SIZES.slice(-1)
-      const sizes = SIZES.slice(0, -1)
+      const maxWidth = /** @type {number} */ (SIZES.at(-1))
+      const widths = SIZES
+        .slice(0, -1)
         .filter(w => w < width)
-        .concat(Math.min(width, maxSize))
-
-      const thumb = {
-        src: adjustImage(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
-        width: 1
-      }
+        .concat(Math.min(width, maxWidth))
 
       const baseImage = builder.image(image).quality(80).auto('format')
-      const sources = sizes.map(width => ({ src: adjustImage(baseImage, width).url(), width }))
+      const sources = widths.map(w => ({ src: adjustImage(baseImage, w).url(), width: w }))
+      const src = /** @type {{ src: string }} */ (sources.at(-1)).src
 
-      const src = sources.slice(-1)[0].src
-      const srcSet = [thumb, ...sources].map(x => `${x.src} ${x.width}w`).join(',')
+      if (hasLqip) return { src, srcSet: formatSrcSet(sources) }
 
+      const thumbnail = {
+        src: adjustImage(builder.image(image).quality(0).blur(20).auto('format'), 20).url(),
+        width: 1,
+      }
 
-      return { src, srcSet, thumb: `${thumb.src} 1w` }
+      return {
+        src,
+        srcSet: formatSrcSet([thumbnail, ...sources]),
+        thumb: `${thumbnail.src} 1w`,
+      }
     },
-    [image, width, builder, adjustImage]
+    [image, width, builder, adjustImage, hasLqip]
   )
+}
+
+/** @arg {{ src: string, width: number }[]} sources */
+function formatSrcSet(sources) {
+  return sources.map(({ src, width }) => `${src} ${width}w`).join(',')
 }
 
 /**

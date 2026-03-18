@@ -49,6 +49,14 @@ export function App({ config }) {
         </div>
       </AppSection>
 
+      <AppSection title='Image with LQIP'>
+        <Image sanityConfig={config.sanity} lqip={imageWithDereferencedAsset.asset.metadata.lqip} image={imageWithDereferencedAsset} />
+      </AppSection>
+
+      <AppSection title='Cropped image with LQIP (16/9)'>
+        <ImageCropped sanityConfig={config.sanity} aspectRatio={16 / 9} lqip={imageWithDereferencedAsset.asset.metadata.lqip} image={imageWithDereferencedAsset} />
+      </AppSection>
+
       <h2>Images with dereferenced assets</h2>
       <p>These are added to stay backwards compatible</p>
 
