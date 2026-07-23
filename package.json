@@ -27,8 +27,7 @@
     "postinstall": "[ -d ./scripts -a -f ./scripts/install-peer-dependencies-for-typescript.js ] && node ./scripts/install-peer-dependencies-for-typescript.js || true"
   },
   "peerDependencies": {
-    "@kaliber/use-element-size": "^4.0.0",
-    "@kaliber/use-observed-ref": "^1.0.0",
+    "@kaliber/react": "^1.0.0",
     "@sanity/image-url": "^2.0.0",
     "react": "^18.0.0"
   },

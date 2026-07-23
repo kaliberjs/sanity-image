@@ -1,4 +1,4 @@
-import { useElementSize } from '@kaliber/use-element-size'
+import { useElementSize } from '@kaliber/react/hooks/useElementSize.js'
 import { createImageUrlBuilder } from '@sanity/image-url'
 /** @import { SanityImageObject, SanityAsset, ImageUrlBuilder } from '@sanity/image-url' */
 /** @import { CSSProperties } from 'react' */
